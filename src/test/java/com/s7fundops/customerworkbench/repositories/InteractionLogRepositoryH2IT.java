@@ -21,19 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-@ContextConfiguration(classes = CustomerWorkbenchApplication.class)
-@EntityScan(basePackages = "com.s7fundops.domain")
-@EnableJpaRepositories(basePackages = "com.s7fundops.customerworkbench.repositories")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:h2:mem:interactionlog;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
-        "spring.datasource.driverClassName=org.h2.Driver",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=",
-        "spring.jpa.hibernate.ddl-auto=none",
-        "spring.flyway.enabled=true",
-        "spring.jpa.show-sql=false"
-})
 class InteractionLogRepositoryH2IT {
 
     @Autowired
