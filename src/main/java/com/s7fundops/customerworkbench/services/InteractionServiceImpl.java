@@ -115,7 +115,13 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     private Specification<InteractionLog> buildSpecification(InteractionSearchCriteria criteria) {
-        Specification<InteractionLog> spec = Specification.where((root, query, cb) -> cb.equal(root.get("customerId"), criteria.getCustomerId()));
+
+        Specification<InteractionLog> spec = Specification.where((root, query, cb) -> {
+            if (criteria.getCustomerId() != null) {
+                return cb.equal(root.get("customerId"), criteria.getCustomerId());
+            }
+            return cb.conjunction();
+        });
 
         if (criteria.getProductId() != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("productId"), criteria.getProductId()));

@@ -46,7 +46,7 @@ public class InteractionController {
     }
 
     @GetMapping
-    public Page<InteractionLogDto> getAll(@RequestParam Integer customerId,
+    public Page<InteractionLogDto> getAll(@RequestParam(required = false) Integer customerId,
                                           @RequestParam(required = false) Integer productId,
                                           @RequestParam(required = false) InteractionType interactionType,
                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
