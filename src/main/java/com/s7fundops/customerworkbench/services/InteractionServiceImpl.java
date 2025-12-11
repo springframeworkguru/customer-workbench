@@ -94,11 +94,12 @@ public class InteractionServiceImpl implements InteractionService {
     @Override
     @Transactional(readOnly = true)
     public Page<InteractionLogDto> search(InteractionSearchCriteria criteria, Pageable pageable) {
-        if (criteria == null || criteria.getCustomerId() == null) {
-            throw new IllegalArgumentException("customerId is required for search");
-        }
+//        if (criteria == null || criteria.getCustomerId() == null) {
+//            throw new IllegalArgumentException("customerId is required for search");
+//        }
 
         Specification<InteractionLog> specification = buildSpecification(criteria);
+
         return repository.findAll(specification, pageable)
                 .map(mapper::toDto);
     }

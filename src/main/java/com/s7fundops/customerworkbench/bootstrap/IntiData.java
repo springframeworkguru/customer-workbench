@@ -30,9 +30,16 @@ public class IntiData implements CommandLineRunner {
 
                 InteractionLog saved = interactionLogRepository.save(interactionLogMapper.toEntity(dto));
                 createdIds.add(saved.getId());
+                log.info("Saved InteractionLog {}", saved);
             }
 
             log.info("Initialized InteractionLog data with ids: {}", createdIds);
+        } else {
+            log.info("########### InteractionLog data already initialized");
+            log.info("Count is {}", interactionLogRepository.count());
+
+            interactionLogRepository.findAll().forEach(interactionLog -> log.info("{}", interactionLog));
+
         }
     }
 }

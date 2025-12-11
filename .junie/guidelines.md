@@ -14,6 +14,25 @@ Overview
 - `**/mappers/` - Mapstruct mappers
 - `**/domain/` - JPA entities
 
+# Frontend Project Structure and Organization
+
+* Organize the React frontend in `src/main/frontend/workbench` directory within the Spring Boot project structure.
+* Use a feature-based directory structure with clear separation of concerns:
+  - `src/components/` - Reusable UI components organized by category (ui, forms, tables, dialogs, etc.)
+  - `src/pages/` - Page-level components representing different routes
+  - `src/services/` - API service layer for backend communication
+  - `src/hooks/` - Custom React hooks for shared logic
+  - `src/utils/` - Utility functions and helpers
+  - `src/types/` - TypeScript type definitions
+  - `src/layouts/` - Layout components for different page structures
+
+**Explanation:**
+
+* **Clear separation of concerns:** Organizing code by feature and responsibility makes it easier to locate, maintain, and test specific functionality.
+* **Scalability:** This structure supports growth as the application expands, allowing teams to work on different features without conflicts.
+* **Reusability:** Separating reusable components from page-specific logic promotes code reuse and consistency across the application.
+
+
 ## Database Management
 - Database migrations are managed with Flyway
 - Migration scripts are in `data-chore/src/main/resources/db/migration/`

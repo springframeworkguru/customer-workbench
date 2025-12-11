@@ -21,15 +21,15 @@ public class InteractionLogDto {
     private Long id;
 
     @CsvBindByName(column = "product_id")
-    @NotNull
+   // @NotNull
     private Integer productId;
 
     @CsvBindByName(column = "customer_id")
-    @NotNull
+   // @NotNull
     private Integer customerId;
 
     @CsvBindByName(column = "interaction_type")
-    @NotNull
+   // @NotNull
     private InteractionType interactionType;
 
     @CsvBindByName(column = "customer_rating")
