@@ -62,7 +62,7 @@ class DataUtilTest {
                 .parse();
 
         assertThat(beans).hasSize(1);
-        InteractionLogDto parsed = beans.get(0);
+        InteractionLogDto parsed = beans.getFirst();
 
         // id is ignored by CSV mapping
         assertThat(parsed.getId()).isNull();

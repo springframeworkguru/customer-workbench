@@ -2,12 +2,12 @@ package com.s7fundops.customerworkbench.repositories;
 
 import com.s7fundops.customerworkbench.domain.InteractionLog;
 import com.s7fundops.customerworkbench.model.InteractionType;
+import com.s7fundops.customerworkbench.TestcontainersConfiguration;
 import org.junit.jupiter.api.Test;
-
-
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -15,9 +15,18 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class InteractionLogRepositoryH2IT {
+/**
+ * PostgreSQL-backed integration test for {@link InteractionLogRepository} using Testcontainers.
+ * <p>
+ * Activates the {@code postgres-it} Spring profile and imports a {@link TestcontainersConfiguration}
+ * which provides a {@code PostgreSQLContainer} with {@code @ServiceConnection}, so Spring Boot will
+ * auto-configure a {@code DataSource} pointing at the running container. Flyway will apply
+ * migrations on startup against this ephemeral database.
+ */
+@Import(TestcontainersConfiguration.class)
+@ActiveProfiles("postgres-it")
+@SpringBootTest
+class InteractionLogRepositoryPostgresIT {
 
     @Autowired
     private InteractionLogRepository repository;
@@ -56,5 +65,4 @@ class InteractionLogRepositoryH2IT {
         assertThatThrownBy(() -> repository.saveAndFlush(log))
                 .isInstanceOf(ConstraintViolationException.class);
     }
-
 }
