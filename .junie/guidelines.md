@@ -4,6 +4,60 @@ Overview
 - Spring Boot 4.0.0 (parent), Java 25, single-module Maven project.
 - Primary focus areas enabled: Data JPA, Flyway, Validation, Web MVC, MapStruct, Lombok, Testcontainers (PostgreSQL), H2 (runtime option), Docker Compose integration.
 
+## Project Structure
+- `**/model/` - Java POJO DTOs
+- `**/bootstrap/` - Statup configuration
+- `**/controller/` - Spring MVC controllers
+- `**/service/` - Business logic and services
+- `**/repository/` - Spring Data JPA repositories
+- `**/config/` - Configuration classes
+- `**/mappers/` - Mapstruct mappers
+- `**/domain/` - JPA entities
+
+## Database Management
+- Database migrations are managed with Flyway
+- Migration scripts are in `data-chore/src/main/resources/db/migration/`
+- Follow naming convention: `V<version>__<description>.sql`
+
+## Java Coding Hints and Conventions
+* The @MockBean annotation is deprecated. Use @MockitoBean instead.
+* When writing unit tests, verify any required properties have values, unless testing an exception condition.
+* When writing unit tests, be sure to test exception conditions, such as validation constraint errors, and ensure the correct exception is thrown.
+* When writing unit tests for classes which implement an interface NEVER create a test implementation of the interface for the class under test.
+* When adding properties to JPA entities or DTOs, add the new properties after other properties, but above the user, dateCreated, and dateUpdated properties.
+* When refactoring classes DO NOT create .new or .tmp files. Refactor the class in place.
+
+### DTO Conventions
+- Use DTOs for Spring MVC controllers
+- Name DTOs with `DTO` suffix
+- For HTTP Get and List operations use <classname>DTO
+- For HTTP Create operations use <classname>CreationDTO. Do not add the id, version, createdDate, or dateUpdated properties to the creation DTO. Ignore the id, version, createdDate, and dateUpdated these properties in MapStruct mappings.
+- For HTTP Update operations use <classname>UpdateDTO. The update DTO should NOT include the id, createdDate, and dateUpdated properties. The version property should be used to check for optimistic locking.
+- For HTTP Patch operations use <classname>PatchDTO. The patch DTO should NOT include the id, createdDate, and dateUpdated properties. The version property should be used to check for optimistic locking. Patch operations should be used to update a single property. The PatchDTO should NOT have validation annotations preventing null or empty values.
+
+### JPA Conventions
+- Use an `Interger` version property annotated with `@Version` for optimistic locking
+- When mapping enumerations to database columns, use `@Enumerated(EnumType.STRING)` to store the enum name instead of the ordinal value.
+- Use a property named `createdDate` of type `LocalDateTime` with `@CreationTimestamp` for the creation date. The column description should use `updatabele = false` to prevent updates to the createdDate property.
+- Use a property named `dateUpdated` of type `LocalDateTime` with `@UpdateTimestamp` for the last update date.
+- Do not use the Lombok `@Data` annotation on JPA entities. Use `@Getter` and `@Setter` instead.
+- Do not add the '@Repository' annotation to the repository interface. The Spring Data JPA will automatically create the implementation at runtime.
+- Use the `@Transactional` annotation on the service class to enable transaction management. The `@Transactional` annotation should be used on the service class and not on the repository interface.
+- Use the `@Transactional(readOnly = true)` annotation on the read-only methods of the service class to enable read-only transactions. This will improve performance and reduce locking on the database.
+- When adding methods to the repository interface, try to avoid using the `@Query` annotation. Use the Spring Data JPA method naming conventions to create the query methods. This will improve readability and maintainability of the code.
+- In services when testing the return values of optionals, throw the `NotFoundException` if the optional is empty. This will provide a 404 response to the client. The `NotFoundException` should be thrown in the service class and not in the controller class.
+
+### Mapstruct Conventions
+- When creating mappers for patch operations, use the annotation `@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)` to ignore null values in the source object. This will prevent null values from overwriting existing values in the target object.
+- Mapper implementations are generated at compile time. If the context is not loading because of missing dependencies, compile java/main to generate the mappers.
+
+### Unit Test Conventions
+- When creating unit tests, use datafaker to generate realistic test data values. See the class `PaymentProcessorBootStrap` for example usage.
+- When creating or updating tests, use the Junit `@DisplayName` annotation to provide a human readable name for the test. This will improve the quality of the test report.
+- When creating or updating tests, use the Junit `@Nested` annotation to group related tests. This will improve the readability of the test report.
+- When investigating test failures of transaction tests, verify the service implementation uses saveAndFlush() to save the entity. This will ensure the entity is saved to the database before the transaction is committed.
+
+
 1) Build and Configuration Instructions
 - JDK: 25. The Maven compiler plugin is set to release 25. Use a matching JDK for build/IDE.
 - MapStruct & Lombok annotation processing:
