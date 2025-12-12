@@ -15,3 +15,29 @@ application code, making it easier to manage and deploy the application in diffe
 
 A custom domain name can also be associated with the application. This domain can be configured Route 53 to point to the
 Elastic Beanstalk application URL. AWS can also be configured to automatically renew the SSL certificate for the domain.
+
+## AWS Deployment Configuration
+The following environment variables need to be set in the Elastic Beanstalk application configuration:- `SPRING_PROFILES_ACTIVE`: Set to `prod` to enable production mode
+- `SPRING_DATASOURCE_URL`: The JDBC URL for the PostgreSQL database
+- `SPRING_DATASOURCE_USERNAME`: The username for the PostgreSQL database
+- `SPRING_DATASOURCE_PASSWORD`: The password for the PostgreSQL database
+- `SPRING_JPA_HIBERNATE_DDL_AUTO`: Set to `validate` to ensure the database schema matches the application model
+- `SPRING_DATASOURCE_DRIVER_CLASS_NAME`: Set to `org.postgresql.Driver`
+- `SPRING_FLYWAY_ENABLED`: Set to `true` to enable Flyway database migrations
+- `SERVER_PORT`: The port number for the application to listen on (default: 8080)
+- `JAVA_OPTS`: Set to `-Xmx2048m -Xms1024m`, adjust as necessary depending on deployment environment
+
+## AWS Beanstalk Configuration
+The backend application can be configured to use health checks via Spring Boot Actuator to ensure the application is running correctly.
+
+#### Example Configuration Snippet
+```yaml
+        readinessProbe:
+          httpGet:
+            port: 8080 # Set to server port
+            path: /actuator/health/readiness
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /actuator/health/liveness
+```
