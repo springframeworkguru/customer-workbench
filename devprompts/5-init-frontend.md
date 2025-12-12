@@ -96,3 +96,15 @@ Data Retrieval Page:
 Provide test coverage for the UI components.
 
 Verify the project builds and and tests pass successfully.
+
+--- 
+Inspect the react project in the directory `src/main/frontend/workbench`.
+
+Complete these tasks. 
+
+For the InteractionsPage component, do the following:
+The results show a message value which is defined as 'const message = interaction.feedback ?? interaction.responsesFromCustomerSupport ?? '
+
+Change the results table to show customer message (interaction.feedback) and customer support message (interaction.responsesFromCustomerSupport)
+
+The message constant is no longer needed. Remove it. Update any tests that use it.

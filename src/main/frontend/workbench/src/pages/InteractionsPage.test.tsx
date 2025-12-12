@@ -50,8 +50,10 @@ test('renders interaction results and stats', () => {
   render(<InteractionsPage />)
 
   expect(screen.getByText('Customer Interactions')).toBeInTheDocument()
-  // Message comes from `feedback` when present
+  // Customer message (feedback) is shown
   expect(screen.getByText('Great support')).toBeInTheDocument()
+  // Support message is shown in its own column
+  expect(screen.getByText('We have updated your order')).toBeInTheDocument()
   expect(screen.getByText('123')).toBeInTheDocument()
   // Interaction type renders the enum value
   expect(screen.getByText('CHAT')).toBeInTheDocument()

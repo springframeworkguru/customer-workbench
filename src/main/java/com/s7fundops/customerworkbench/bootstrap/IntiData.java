@@ -24,7 +24,7 @@ public class IntiData implements CommandLineRunner {
         if (interactionLogRepository.count() == 0) {
             List<Long> createdIds = new ArrayList<>(5);
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 55; i++) {
                 var dto = DataUtil.randomInteraction();
                 dto.setId(null);
 

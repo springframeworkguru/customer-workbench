@@ -157,23 +157,33 @@ function InteractionsPage() {
                   <th className="w-40 border-b border-slate-200 px-3 py-2">Timestamp</th>
                   <th className="w-28 border-b border-slate-200 px-3 py-2">Customer ID</th>
                   <th className="w-32 border-b border-slate-200 px-3 py-2">Interaction</th>
-                  <th className="border-b border-slate-200 px-3 py-2">Message</th>
+                  <th className="w-[28rem] border-b border-slate-200 px-3 py-2">Customer Message</th>
+                  <th className="w-[28rem] border-b border-slate-200 px-3 py-2">Support Message</th>
                 </tr>
               </thead>
               <tbody>
-                {data.content.map((interaction) => {
-                  const message = interaction.feedback ?? interaction.responsesFromCustomerSupport ?? ''
-                  return (
-                    <tr key={interaction.id ?? `${interaction.customerId}-${interaction.interactionDate}`} className="odd:bg-white even:bg-slate-50">
-                      <td className="border-b border-slate-100 px-3 py-2 align-top text-slate-800">{formatDateTime(interaction.interactionDate)}</td>
-                      <td className="border-b border-slate-100 px-3 py-2 align-top text-slate-800">{interaction.customerId}</td>
-                      <td className="border-b border-slate-100 px-3 py-2 align-top">
-                        <Badge variant="info">{interaction.interactionType}</Badge>
-                      </td>
-                      <td className="border-b border-slate-100 px-3 py-2 align-top text-slate-700">{truncate(message, 120)}</td>
-                    </tr>
-                  )
-                })}
+                {data.content.map((interaction) => (
+                  <tr
+                    key={interaction.id ?? `${interaction.customerId}-${interaction.interactionDate}`}
+                    className="odd:bg-white even:bg-slate-50"
+                  >
+                    <td className="border-b border-slate-100 px-3 py-2 align-top text-slate-800">
+                      {formatDateTime(interaction.interactionDate)}
+                    </td>
+                    <td className="border-b border-slate-100 px-3 py-2 align-top text-slate-800">
+                      {interaction.customerId}
+                    </td>
+                    <td className="border-b border-slate-100 px-3 py-2 align-top">
+                      <Badge variant="info">{interaction.interactionType}</Badge>
+                    </td>
+                    <td className="border-b border-slate-100 px-3 py-2 align-top text-slate-700">
+                      {truncate(interaction.feedback ?? '', 120)}
+                    </td>
+                    <td className="border-b border-slate-100 px-3 py-2 align-top text-slate-700">
+                      {truncate(interaction.responsesFromCustomerSupport ?? '', 120)}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
