@@ -80,11 +80,15 @@ public class InteractionServiceImpl implements InteractionService {
         return entities.size();
     }
 
+    @Transactional
     @Override
     public InteractionLogDto create(InteractionLogDto dto) {
         if (dto == null) {
             throw new IllegalArgumentException("InteractionLogDto is required");
         }
+
+        //ensure id is null on create
+        dto.setId(null);
 
         InteractionLog entity = mapper.toEntity(dto);
         InteractionLog saved = repository.save(entity);
@@ -94,9 +98,6 @@ public class InteractionServiceImpl implements InteractionService {
     @Override
     @Transactional(readOnly = true)
     public Page<InteractionLogDto> search(InteractionSearchCriteria criteria, Pageable pageable) {
-//        if (criteria == null || criteria.getCustomerId() == null) {
-//            throw new IllegalArgumentException("customerId is required for search");
-//        }
 
         Specification<InteractionLog> specification = buildSpecification(criteria);
 

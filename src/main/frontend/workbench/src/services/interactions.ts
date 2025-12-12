@@ -20,3 +20,19 @@ export async function fetchInteractions(query: InteractionQuery): Promise<Page<I
   const response = await apiClient.get<Page<Interaction>>('/interactions', { params })
   return response.data
 }
+
+export async function createInteraction(payload: Omit<Interaction, 'id'> | Partial<Interaction>): Promise<Interaction> {
+  // Backend accepts application/json for a single interaction
+  const response = await apiClient.post<Interaction>('/interactions', payload)
+  return response.data
+}
+
+export async function uploadCsv(file: File): Promise<{ ingested: number }> {
+  const form = new FormData()
+  form.append('file', file)
+
+  const response = await apiClient.post<{ ingested: number }>('/interactions', form, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return response.data
+}
